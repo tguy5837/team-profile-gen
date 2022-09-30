@@ -13,13 +13,13 @@ test('make sure engineer gets employee properties', () => {
 });
 
 test('make sure github property is added', () => {
-    const engineer = new Engineer('John', '21', 'johndoe@example.com', 'github');
+    const engineer = new Engineer('FROM-MOCK', 'FROM-MOCK', 'FROM-MOCK', 'github');
 
     expect(engineer.github).toBe('github');
 });
 
 test('should return github from getGithub()', () => {
-    const engineer = new Engineer('John', '21', 'johndoe@example.com', 'github');
+    const engineer = new Engineer('FROM-MOCK', 'FROM-MOCK', 'FROM-MOCK', 'github');
 
     expect(engineer.getGithub()).toBe('github');
 });
