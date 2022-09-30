@@ -36,8 +36,8 @@ const promptEngineerOrIntern = () => {
         {
             type: 'list',
             name: 'newTeamMember',
-            message: 'Would you like to add an intern or an engineer?',
-            choices: ['Engineer', 'Intern']
+            message: 'Would you like to add an Engineer or an Intern?',
+            choices: ['Engineer', 'Intern', 'Neither']
         }
     ])
 };
@@ -62,7 +62,7 @@ const promptNewEngineer = () => {
         },
         {
             type: 'input',
-            name: 'gitHub',
+            name: 'github',
             message: "Please enter the Engineer's GitHub username:"
         }
     ])
@@ -96,31 +96,71 @@ const promptNewIntern = () => {
 
 // call prompt functions
 promptManager()
-    .then(managerInfo => {
+    .then(async managerInfo => {
         // initialize team array
         const team = [];
-        // create new Manager()
+
+        // create easy variables
         const name = managerInfo.name;
         const id = managerInfo.id;
         const email = managerInfo.email;
         const officeNumber = managerInfo.officeNumber;
 
+        // create new Manager()
         const manager = new Manager(name, id, email, officeNumber);
 
+        // add manager to team
         team.push(manager);
 
-        console.log(team);
+        // set team capacity
+        const teamCapacity = 15;
 
-        promptEngineerOrIntern(team)
-            .then(newMember => {
-                if (newMember.newTeamMember === 'Engineer') {
-                    promptNewEngineer()
-                        .then(newEngineerInfo => {
-                            team.push(newEngineerInfo);
-                            console.log(team);
-                        })
-                } else {
-                    console.log('Intern!')
-                }
-            })
+        // initialize loop
+        let continuePrompt = true;
+
+        while (continuePrompt) {
+            await promptEngineerOrIntern(team)
+                .then(async newMember => {
+
+                    if (newMember.newTeamMember === 'Engineer') {
+                        await promptNewEngineer()
+                            .then(engineerInfo => {
+                                // create easy engineer variables
+                                const name = engineerInfo.name;
+                                const id = engineerInfo.id;
+                                const email = engineerInfo.email;
+                                const github = engineerInfo.github;
+
+                                // create new Engineer()
+                                const engineer = new Engineer(name, id, email, github);
+
+                                // add engineer to team
+                                team.push(engineer);
+
+                            })
+                    } else if (newMember.newTeamMember === 'Intern') {
+                        await promptNewIntern()
+                            .then(internInfo => {
+                                // create easy engineer variables
+                                const name = internInfo.name;
+                                const id = internInfo.id;
+                                const email = internInfo.email;
+                                const school = internInfo.school;
+
+                                // create new Engineer()
+                                const intern = new Intern(name, id, email, school);
+
+                                // add intern to team
+                                team.push(intern);
+
+                            })
+                    } else {
+                        // create HTML with team
+                        continuePrompt = false;
+                        return team;
+                    }
+
+                })
+        }
+        console.log(team);
     })
