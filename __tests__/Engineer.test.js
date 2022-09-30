@@ -5,7 +5,7 @@ jest.mock('../lib/Employee');
 const Engineer = require('../lib/Engineer');
 
 test('make sure engineer gets employee properties', () => {
-    const engineer = new Engineer('John', '21', 'johndoe@example.com');
+    const engineer = new Engineer();
 
     expect(engineer.name).toBe('John');
     expect(engineer.id).toBe('21');
@@ -25,7 +25,7 @@ test('should return github from getGithub()', () => {
 });
 
 test('should return Engineer from getRole()', () => {
-    const engineer = new Engineer('John', '21', 'johndoe@example.com', 'github');
+    const engineer = new Engineer();
 
     expect(engineer.getRole()).toBe('Engineer');
 })
