@@ -1,3 +1,4 @@
+const { writeFile, copyFile } = require('./utils/generate-site');
 const inquirer = require('inquirer');
 const generateHTML = require('./src/html-template');
 
@@ -152,16 +153,39 @@ promptManager()
 
                                 // add intern to team
                                 teamArr.push(intern);
+
+                                return teamArr;
                             })
                     } else {
                         // end while loop
                         continuePrompt = false;
 
                         // create HTML
-                        generateHTML(teamArr);
+                        return generateHTML(teamArr);
                     }
 
                 })
+                .then(pageHtml => {
+                    if (!continuePrompt) {
+                        return writeFile(pageHtml);
+                    }
+                })
+                .then(writeFileResponse => {
+                    if (!continuePrompt) {
+                        console.log(writeFileResponse);
+                        return copyFile();
+                    }
+                })
+                .then(copyFileResponse => {
+                    if (!continuePrompt) {
+                        console.log(copyFileResponse);
+                    };
+                })
+                .catch(err => {
+                    if (!continuePrompt) {
+                        console.log(err);
+                    };
+                });
         }
     })
 

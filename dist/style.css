@@ -1,0 +1,10 @@
+#header-svg {
+  height: 3rem;
+  width: 3rem;
+}
+
+svg {
+  height: 2rem;
+  width: 2rem;
+  margin: 0 7px 10px;
+}
