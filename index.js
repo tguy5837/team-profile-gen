@@ -1,4 +1,5 @@
 const inquirer = require('inquirer');
+const generateHTML = require('./src/html-template');
 
 const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
@@ -36,8 +37,8 @@ const promptEngineerOrIntern = () => {
         {
             type: 'list',
             name: 'newTeamMember',
-            message: 'Would you like to add an Engineer or an Intern?',
-            choices: ['Engineer', 'Intern', 'Neither']
+            message: 'Would you like to add an Engineer, an Inter, or finish?',
+            choices: ['Add Engineer', 'Add Intern', 'Finish - Create my team portfolio!']
         }
     ])
 };
@@ -122,7 +123,7 @@ promptManager()
             await promptEngineerOrIntern(team)
                 .then(async newMember => {
 
-                    if (newMember.newTeamMember === 'Engineer') {
+                    if (newMember.newTeamMember === 'Add Engineer') {
                         await promptNewEngineer()
                             .then(engineerInfo => {
                                 // create easy engineer variables
@@ -138,7 +139,7 @@ promptManager()
                                 team.push(engineer);
 
                             })
-                    } else if (newMember.newTeamMember === 'Intern') {
+                    } else if (newMember.newTeamMember === 'Add Intern') {
                         await promptNewIntern()
                             .then(internInfo => {
                                 // create easy engineer variables
@@ -162,5 +163,7 @@ promptManager()
 
                 })
         }
-        console.log(team);
+    })
+    .then(team => {
+        generateHTML(team)
     })
