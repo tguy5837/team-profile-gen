@@ -99,7 +99,7 @@ const promptNewIntern = () => {
 promptManager()
     .then(async managerInfo => {
         // initialize team array
-        const team = [];
+        const teamArr = [];
 
         // create easy variables
         const name = managerInfo.name;
@@ -111,20 +111,17 @@ promptManager()
         const manager = new Manager(name, id, email, officeNumber);
 
         // add manager to team
-        team.push(manager);
-
-        // set team capacity
-        const teamCapacity = 15;
+        teamArr.push(manager);
 
         // initialize loop
         let continuePrompt = true;
 
         while (continuePrompt) {
-            await promptEngineerOrIntern(team)
+            await promptEngineerOrIntern(teamArr)
                 .then(async newMember => {
 
                     if (newMember.newTeamMember === 'Add Engineer') {
-                        await promptNewEngineer()
+                        await promptNewEngineer(teamArr)
                             .then(engineerInfo => {
                                 // create easy engineer variables
                                 const name = engineerInfo.name;
@@ -136,11 +133,13 @@ promptManager()
                                 const engineer = new Engineer(name, id, email, github);
 
                                 // add engineer to team
-                                team.push(engineer);
+                                teamArr.push(engineer);
+
+                                return teamArr;
 
                             })
                     } else if (newMember.newTeamMember === 'Add Intern') {
-                        await promptNewIntern()
+                        await promptNewIntern(teamArr)
                             .then(internInfo => {
                                 // create easy engineer variables
                                 const name = internInfo.name;
@@ -152,18 +151,17 @@ promptManager()
                                 const intern = new Intern(name, id, email, school);
 
                                 // add intern to team
-                                team.push(intern);
-
+                                teamArr.push(intern);
                             })
                     } else {
-                        // create HTML with team
+                        // end while loop
                         continuePrompt = false;
-                        return team;
+
+                        // create HTML
+                        generateHTML(teamArr);
                     }
 
                 })
         }
     })
-    .then(team => {
-        generateHTML(team)
-    })
+
